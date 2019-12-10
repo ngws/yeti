@@ -12,7 +12,7 @@ class UrlHaus(Feed):
     default_values = {
         "frequency": timedelta(minutes=20),
         "name": "UrlHaus",
-        "source": "https://urlhaus.abuse.ch/downloads/csv/",
+        "source": "https://urlhaus.abuse.ch/downloads/csv_recent/",
         "description":
             "URLhaus is a project from abuse.ch with the goal of sharing malicious URLs that are being used for malware distribution.",
     }
@@ -28,17 +28,16 @@ class UrlHaus(Feed):
             if self.last_run is not None:
                 since_last_run = datetime.now() - self.frequency
                 if since_last_run > first_seen:
-                    return
+                    continue
 
-            self.analyze(line, first_seen)
+            self.analyze(line)
 
-    def analyze(self, line, first_seen):
+    def analyze(self, line):
 
         id_feed, first_seen, url, url_status, threat, tags, urlhaus_link, source = line # pylint: disable=line-too-long
 
         context = {
             "id_urlhaus": id_feed,
-            "first_seen": first_seen,
             "status": url_status,
             "source": self.name,
             "report": urlhaus_link,

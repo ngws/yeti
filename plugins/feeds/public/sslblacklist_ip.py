@@ -28,7 +28,7 @@ class SSLBlackListIP(Feed):
             first_seen = parser.parse(line[0])
             if self.last_run is not None:
                 if since_last_run > first_seen:
-                    return
+                    continue
 
             self.analyze(line, first_seen)
 
@@ -36,9 +36,7 @@ class SSLBlackListIP(Feed):
 
         _, dst_ip, port = line
         ip_obs = False
-        tags = []
-        tags.append("potentially_malicious_infrastructure")
-        tags.append("c2")
+        tags = ["potentially_malicious_infrastructure", "c2"]
 
         context = dict(source=self.name)
         context["first_seen"] = first_seen

@@ -27,8 +27,8 @@ class CybercrimeTracker(Feed):
 
             pub_date = parser.parse(item['pubDate'])
             if self.last_run is not None:
-                if since_last_run > pub_date:
-                    return
+                if since_last_run > pub_date.replace(tzinfo=None):
+                    continue
 
             self.analyze(item, pub_date)
 
